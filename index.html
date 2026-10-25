@@ -1,0 +1,1156 @@
+<title>Terre Verte CI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  /* Layout: editorial magazine grid — asymmetric hero, category tabs, card mosaic */
+  :root {
+    --bg: #f7f6f1;
+    --bg-card: #ffffff;
+    --fg: #1a2e1a;
+    --fg-muted: #5a6b5a;
+    --fg-caption: #7d8c7d;
+    --accent: #2d6a3f;
+    --accent-light: #e8f0e8;
+    --accent-warm: #c9a84c;
+    --border: #dde4dd;
+    --hero-overlay: rgba(10, 28, 12, 0.55);
+    --tag-bg: rgba(45, 106, 63, 0.1);
+    --shadow: 0 2px 12px rgba(26, 46, 26, 0.08);
+    --radius: 6px;
+    --font-display: 'Lora', 'Georgia', serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1a10;
+      --bg-card: #1a2b1c;
+      --fg: #e4e8e2;
+      --fg-muted: #a3b0a3;
+      --fg-caption: #7d8c7d;
+      --accent: #5cb87a;
+      --accent-light: #1e3326;
+      --accent-warm: #d4b85c;
+      --border: #2a3d2c;
+      --hero-overlay: rgba(6, 14, 6, 0.65);
+      --tag-bg: rgba(92, 184, 122, 0.12);
+      --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1a10;
+    --bg-card: #1a2b1c;
+    --fg: #e4e8e2;
+    --fg-muted: #a3b0a3;
+    --fg-caption: #7d8c7d;
+    --accent: #5cb87a;
+    --accent-light: #1e3326;
+    --accent-warm: #d4b85c;
+    --border: #2a3d2c;
+    --hero-overlay: rgba(6, 14, 6, 0.65);
+    --tag-bg: rgba(92, 184, 122, 0.12);
+    --shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    padding-inline: 16px;
+  }
+
+  /* ---- NAV ---- */
+  .site-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    background: var(--bg);
+    z-index: 100;
+  }
+  .site-logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .site-logo svg { flex-shrink: 0; }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--fg-muted);
+    font-size: 0.88rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--accent);
+  }
+  .nav-hamburger {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--fg);
+    cursor: pointer;
+    padding: 4px;
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+      gap: 16px;
+    }
+    .nav-hamburger { display: block; }
+  }
+
+  /* ---- HERO ---- */
+  .hero {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0;
+    min-height: 380px;
+    display: flex;
+    align-items: flex-end;
+    background: linear-gradient(135deg, #1a3a20 0%, #2d5a35 40%, #3d7a4a 100%);
+    cursor: pointer;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(45,106,63,0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(201,168,76,0.15) 0%, transparent 40%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23264d2e'/%3E%3Cstop offset='1' stop-color='%233a7a48'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cellipse cx='320' cy='250' rx='120' ry='80' fill='%231e4426' opacity='0.4'/%3E%3Cellipse cx='80' cy='220' rx='90' ry='60' fill='%231e4426' opacity='0.3'/%3E%3Cpath d='M200 280 Q200 120 160 80 Q180 140 200 280Z' fill='%23306838' opacity='0.6'/%3E%3Cpath d='M200 280 Q200 100 240 60 Q220 130 200 280Z' fill='%23387a42' opacity='0.5'/%3E%3Cpath d='M200 280 Q190 150 150 110 Q175 160 200 280Z' fill='%23285c32' opacity='0.4'/%3E%3Cpath d='M200 280 Q210 130 260 90 Q230 155 200 280Z' fill='%23408a4e' opacity='0.35'/%3E%3Ccircle cx='60' cy='60' r='25' fill='%23c9a84c' opacity='0.12'/%3E%3Ccircle cx='340' cy='40' r='18' fill='%23c9a84c' opacity='0.08'/%3E%3C/svg%3E");
+    background-size: cover;
+    background-position: center;
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 32px;
+    max-width: 560px;
+  }
+  .hero-tag {
+    display: inline-block;
+    background: var(--accent-warm);
+    color: #1a2e1a;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 3px;
+    margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: #fff;
+    margin: 0 0 10px;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.82);
+    font-size: 0.95rem;
+    margin: 0 0 16px;
+    line-height: 1.55;
+  }
+  .hero-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.65);
+    font-size: 0.78rem;
+  }
+  .hero-meta .dot { opacity: 0.4; }
+
+  /* ---- CATEGORY TABS ---- */
+  .categories {
+    display: flex;
+    gap: 8px;
+    padding: 20px 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-tab {
+    flex-shrink: 0;
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--fg-muted);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .cat-tab:hover { border-color: var(--accent); color: var(--accent); }
+  .cat-tab.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+
+  /* ---- SECTION HEADING ---- */
+  .section-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 32px 0 18px;
+  }
+  .section-heading h2 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .section-heading a {
+    font-size: 0.82rem;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  /* ---- ARTICLE CARDS ---- */
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+  .article-card {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+  .article-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(26, 46, 26, 0.12);
+  }
+  .card-img {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card-img svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .card-body {
+    padding: 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card-category {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+  }
+  .card-body h3 {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.35;
+  }
+  .card-body .excerpt {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    margin: 0;
+    flex: 1;
+  }
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 0.75rem;
+    color: var(--fg-caption);
+  }
+  .card-footer .read-time {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* ---- FEATURED SIDEBAR ---- */
+  .content-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 32px;
+    margin-bottom: 40px;
+  }
+  @media (max-width: 800px) {
+    .content-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  .sidebar { display: flex; flex-direction: column; gap: 24px; }
+  .sidebar-box {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .sidebar-box h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 14px;
+  }
+  .popular-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .popular-item:last-child { border-bottom: none; }
+  .popular-num {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.4;
+    line-height: 1;
+    min-width: 28px;
+  }
+  .popular-item h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 2px;
+    line-height: 1.35;
+  }
+  .popular-item .pop-cat {
+    font-size: 0.7rem;
+    color: var(--fg-caption);
+  }
+
+  /* ---- NEWSLETTER ---- */
+  .newsletter-box {
+    background: var(--accent-light);
+    border: 1px solid var(--border);
+  }
+  .newsletter-box p {
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    margin: 0 0 14px;
+    line-height: 1.5;
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 8px;
+  }
+  .newsletter-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    background: var(--bg);
+    color: var(--fg);
+  }
+  .newsletter-form input::placeholder { color: var(--fg-caption); }
+  .newsletter-form button, .btn-primary {
+    padding: 10px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+  }
+  .newsletter-form button:hover, .btn-primary:hover { opacity: 0.88; }
+
+  /* ---- ECO TIPS BANNER ---- */
+  .eco-banner {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 40px 0;
+  }
+  @media (max-width: 640px) {
+    .eco-banner { grid-template-columns: 1fr; }
+  }
+  .eco-tip {
+    background: var(--bg-card);
+    border-radius: var(--radius);
+    padding: 22px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .eco-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+  }
+  .eco-tip h4 {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  .eco-tip p {
+    font-size: 0.8rem;
+    color: var(--fg-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* ---- ARTICLE VIEW (modal-like) ---- */
+  .article-view {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--bg);
+    overflow-y: auto;
+    padding: 0 16px env(safe-area-inset-bottom, 0px);
+    display: none;
+  }
+  .article-view.open { display: block; }
+  .article-header {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 24px 0;
+  }
+  .article-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: var(--font-body);
+    margin-bottom: 24px;
+  }
+  .article-view .art-category {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .article-view h1 {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    line-height: 1.25;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .article-view .art-meta {
+    font-size: 0.82rem;
+    color: var(--fg-caption);
+    margin-bottom: 28px;
+  }
+  .article-view .art-hero-img {
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto 28px;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .article-view .art-hero-img svg { width: 100%; height: 100%; }
+  .article-body {
+    max-width: 680px;
+    margin: 0 auto;
+    padding-bottom: 60px;
+  }
+  .article-body p {
+    font-size: 1rem;
+    line-height: 1.75;
+    margin: 0 0 18px;
+    color: var(--fg);
+  }
+  .article-body h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    margin: 32px 0 12px;
+  }
+  .article-body blockquote {
+    border-left: 3px solid var(--accent);
+    margin: 24px 0;
+    padding: 12px 20px;
+    font-style: italic;
+    color: var(--fg-muted);
+    background: var(--accent-light);
+    border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  /* ---- FOOTER ---- */
+  .site-footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.78rem;
+    color: var(--fg-caption);
+    margin-bottom: 16px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .footer-links a {
+    color: var(--fg-muted);
+    text-decoration: none;
+    font-size: 0.78rem;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+  /* ---- LIKES & FAVORITES ---- */
+  .like-btn, .fav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--fg-caption);
+    padding: 4px 8px;
+    border-radius: 16px;
+    transition: all 0.2s;
+  }
+  .like-btn:hover { color: #d44; background: rgba(221,68,68,0.08); }
+  .like-btn.liked { color: #d44; }
+  .like-btn.liked svg { fill: #d44; stroke: #d44; }
+  .like-btn .pop {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .like-btn.liked .pop { transform: scale(1.3); }
+
+  .fav-btn:hover { color: var(--accent-warm); background: rgba(201,168,76,0.08); }
+  .fav-btn.saved { color: var(--accent-warm); }
+  .fav-btn.saved svg { fill: var(--accent-warm); stroke: var(--accent-warm); }
+
+  .card-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .art-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .art-actions .like-btn,
+  .art-actions .fav-btn {
+    font-size: 0.88rem;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+  .art-actions .like-btn:hover { border-color: #d44; }
+  .art-actions .fav-btn:hover { border-color: var(--accent-warm); }
+  .art-actions .like-btn.liked { border-color: #d44; background: rgba(221,68,68,0.06); }
+  .art-actions .fav-btn.saved { border-color: var(--accent-warm); background: rgba(201,168,76,0.06); }
+
+  /* Favorites nav link badge */
+  .fav-nav-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-warm);
+    color: #1a2e1a;
+    font-size: 0.65rem;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 8px;
+    padding: 0 4px;
+    margin-left: 4px;
+  }
+
+  /* Favorites empty state */
+  .fav-empty {
+    text-align: center;
+    padding: 20px 0;
+    color: var(--fg-caption);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  /* Toast notification */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--fg);
+    color: var(--bg);
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    z-index: 300;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* ---- SMOOTH ---- */
+  * { box-sizing: border-box; }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <a class="site-logo" href="#" onclick="closeArticle(); return false;">
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+      <circle cx="13" cy="13" r="12" fill="currentColor" opacity="0.15"/>
+      <path d="M13 4 C13 4 8 10 8 15 C8 18 10.5 21 13 21 C15.5 21 18 18 18 15 C18 10 13 4 13 4Z" fill="currentColor" opacity="0.7"/>
+      <path d="M13 8 C13 8 10 12 10 15 C10 17 11.5 19 13 19 C14.5 19 16 17 16 15 C16 12 13 8 13 8Z" fill="currentColor"/>
+    </svg>
+    Terre Verte
+  </a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#" class="active" onclick="filterCategory('all'); return false;">Accueil</a></li>
+    <li><a href="#" onclick="filterCategory('faune'); return false;">Faune</a></li>
+    <li><a href="#" onclick="filterCategory('flore'); return false;">Flore</a></li>
+    <li><a href="#" onclick="filterCategory('ecotourisme'); return false;">Écotourisme</a></li>
+    <li><a href="#" onclick="filterCategory('jardinage'); return false;">Jardinage</a></li>
+    <li><a href="#" onclick="showFavorites(); return false;" id="navFavLink">♥ Favoris <span class="fav-nav-count" id="navFavCount" hidden>0</span></a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Menu">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero" onclick="openArticle(0)">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="hero-tag">À la une</span>
+    <h1>Le Parc National de Taï : dernier sanctuaire de la forêt primaire ouest-africaine</h1>
+    <p>Plongée au cœur de l'une des dernières forêts tropicales intactes d'Afrique de l'Ouest, classée au patrimoine mondial de l'UNESCO.</p>
+    <div class="hero-meta">
+      <span>Par Amara Koné</span>
+      <span class="dot">·</span>
+      <span>28 sept. 2026</span>
+      <span class="dot">·</span>
+      <span>8 min de lecture</span>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORY TABS -->
+<div class="categories" id="categoryTabs">
+  <button class="cat-tab active" onclick="filterCategory('all')">Tout</button>
+  <button class="cat-tab" onclick="filterCategory('faune')">🦎 Faune</button>
+  <button class="cat-tab" onclick="filterCategory('flore')">🌿 Flore</button>
+  <button class="cat-tab" onclick="filterCategory('ecotourisme')">🧭 Écotourisme</button>
+  <button class="cat-tab" onclick="filterCategory('environnement')">♻️ Environnement</button>
+  <button class="cat-tab" onclick="filterCategory('jardinage')">🌱 Jardinage</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="content-layout">
+  <div>
+    <div class="section-heading">
+      <h2>Articles récents</h2>
+      <a href="#">Voir tout →</a>
+    </div>
+    <div class="articles-grid" id="articlesGrid">
+      <!-- Cards inserted by JS -->
+    </div>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-box">
+      <h3>Les plus lus</h3>
+      <div id="popularList"></div>
+    </div>
+
+    <div class="sidebar-box newsletter-box">
+      <h3>Newsletter Nature</h3>
+      <p>Recevez chaque semaine nos articles, conseils jardinage et alertes éco directement dans votre boîte mail.</p>
+      <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+        <input type="email" id="nlEmail" placeholder="votre@email.com" required>
+        <button type="submit">S'abonner</button>
+      </form>
+      <p id="nlMsg" style="margin-top:8px; font-size:0.8rem; color:var(--accent); display:none;"></p>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Saison en cours</h3>
+      <div style="text-align:center; padding:8px 0;">
+        <svg width="60" height="60" viewBox="0 0 60 60">
+          <circle cx="30" cy="30" r="22" fill="var(--accent-warm)" opacity="0.2"/>
+          <circle cx="30" cy="30" r="14" fill="var(--accent-warm)" opacity="0.4"/>
+          <circle cx="30" cy="30" r="7" fill="var(--accent-warm)"/>
+        </svg>
+        <p style="font-family:var(--font-display); font-size:1rem; margin:8px 0 2px;">Saison sèche</p>
+        <p style="font-size:0.78rem; color:var(--fg-caption); margin:0;">Oct – Mars · Idéal pour l'observation</p>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ECO TIPS -->
+<div class="section-heading">
+  <h2>Gestes éco du mois</h2>
+</div>
+<div class="eco-banner">
+  <div class="eco-tip">
+    <div class="eco-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.5-3 9-7.5 9-12a9 9 0 0 0-18 0c0 4.5 3.5 9 9 12z"/><path d="M12 8v4l2 2"/></svg>
+    </div>
+    <h4>Économiser l'eau</h4>
+    <p>Arrosez vos plantes le soir pour réduire l'évaporation de 60 % en saison sèche.</p>
+  </div>
+  <div class="eco-tip">
+    <div class="eco-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
+    </div>
+    <h4>Compostez vos déchets</h4>
+    <p>Les pelures de fruits et restes végétaux enrichissent votre sol naturellement.</p>
+  </div>
+  <div class="eco-tip">
+    <div class="eco-icon">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18"/><path d="M5 12l7-7 7 7"/><circle cx="12" cy="21" r="1"/></svg>
+    </div>
+    <h4>Plantez un arbre</h4>
+    <p>Un seul arbre absorbe environ 22 kg de CO₂ par an. Chaque geste compte.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <span>© 2026 Terre Verte CI · Abidjan, Côte d'Ivoire</span>
+  <ul class="footer-links">
+    <li><a href="#">À propos</a></li>
+    <li><a href="#">Contact</a></li>
+    <li><a href="#">Mentions légales</a></li>
+  </ul>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ARTICLE VIEW -->
+<div class="article-view" id="articleView">
+  <div class="article-header">
+    <button class="article-back" onclick="closeArticle()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      Retour
+    </button>
+    <div class="art-category" id="artCategory"></div>
+    <h1 id="artTitle"></h1>
+    <div class="art-meta" id="artMeta"></div>
+    <div class="art-actions" id="artActions"></div>
+  </div>
+  <div class="article-body" id="artBody"></div>
+</div>
+
+<script>
+const articles = [
+  {
+    category: "ecotourisme",
+    catLabel: "Écotourisme",
+    title: "Le Parc National de Taï : dernier sanctuaire de la forêt primaire",
+    excerpt: "Plongée au cœur de l'une des dernières forêts tropicales intactes d'Afrique de l'Ouest.",
+    author: "Amara Koné",
+    date: "28 sept. 2026",
+    readTime: "8 min",
+    colors: ["#1a4d28", "#2d7a3f", "#3a9e52"],
+    body: `<p>Le Parc National de Taï, situé dans le sud-ouest de la Côte d'Ivoire, couvre plus de 5 300 km² de forêt tropicale humide. Classé au patrimoine mondial de l'UNESCO depuis 1982, il représente l'un des derniers vestiges significatifs de la forêt primaire en Afrique de l'Ouest.</p>
+    <h2>Un écosystème irremplaçable</h2>
+    <p>Cette forêt abrite une biodiversité exceptionnelle : plus de 1 300 espèces végétales, 140 espèces de mammifères dont l'hippopotame pygmée et le chimpanzé de l'Ouest, ainsi que plus de 250 espèces d'oiseaux.</p>
+    <blockquote>La forêt de Taï est un laboratoire vivant, une bibliothèque de la nature que nous devons préserver pour les générations futures.</blockquote>
+    <h2>Visiter responsablement</h2>
+    <p>L'accès au parc est encadré par l'OIPR. Les visiteurs doivent être accompagnés d'un guide agréé. Plusieurs circuits de randonnée permettent d'observer la faune tout en minimisant l'impact sur l'environnement. La meilleure période se situe entre décembre et février.</p>
+    <p>Des écolodges autour du parc offrent un hébergement respectueux de l'environnement, contribuant à l'économie locale tout en finançant les efforts de conservation.</p>`
+  },
+  {
+    category: "faune",
+    catLabel: "Faune",
+    title: "L'éléphant de forêt : un géant menacé en terre ivoirienne",
+    excerpt: "Portrait de l'éléphant de forêt d'Afrique, espèce en danger critique qui survit dans nos réserves.",
+    author: "Fatou Diallo",
+    date: "25 sept. 2026",
+    readTime: "6 min",
+    colors: ["#3d2e1a", "#6b5a3d", "#8a7552"],
+    body: `<p>L'éléphant de forêt d'Afrique (Loxodonta cyclotis) est plus petit que son cousin de la savane, mais joue un rôle tout aussi crucial dans l'écosystème.</p>
+    <h2>Ingénieur de la forêt</h2>
+    <p>Surnommé le « jardinier de la forêt », l'éléphant disperse les graines de nombreuses espèces d'arbres à travers ses déplacements. Certaines graines ne peuvent germer qu'après avoir traversé son système digestif.</p>
+    <h2>Menaces et conservation</h2>
+    <p>Le braconnage pour l'ivoire et la perte d'habitat restent les principales menaces. Des programmes de surveillance par drones et des patrouilles anti-braconnage sont déployés avec le soutien d'ONG internationales.</p>`
+  },
+  {
+    category: "flore",
+    catLabel: "Flore",
+    title: "Les orchidées sauvages de la forêt ivoirienne",
+    excerpt: "Découverte de ces fleurs extraordinaires qui peuplent nos forêts tropicales humides.",
+    author: "Aïcha Touré",
+    date: "22 sept. 2026",
+    readTime: "5 min",
+    colors: ["#4a1a4d", "#7a3d80", "#a35cb0"],
+    body: `<p>La Côte d'Ivoire héberge plus de 230 espèces d'orchidées, dont certaines sont endémiques. Ces plantes épiphytes s'accrochent aux branches des grands arbres de la canopée.</p>
+    <h2>Des trésors de la canopée</h2>
+    <p>Les orchidées ivoiriennes présentent une diversité de formes et de couleurs étonnante. Certaines déploient de longs éperons remplis de nectar pour attirer les papillons de nuit.</p>
+    <blockquote>Chaque orchidée est une œuvre d'art façonnée par des millions d'années d'évolution.</blockquote>
+    <p>La déforestation menace directement ces espèces fragiles. Des botanistes ivoiriens travaillent à cataloguer et protéger ces trésors botaniques.</p>`
+  },
+  {
+    category: "jardinage",
+    catLabel: "Jardinage",
+    title: "Cultiver un potager urbain à Abidjan : guide pratique",
+    excerpt: "Techniques et astuces pour créer votre potager sur une terrasse ou un balcon abidjanais.",
+    author: "Yao Kouadio",
+    date: "18 sept. 2026",
+    readTime: "7 min",
+    colors: ["#2d4a1a", "#4d7a2d", "#6b9e45"],
+    body: `<p>Même dans l'effervescence d'Abidjan, il est possible de cultiver ses propres légumes. Un balcon de 4 m², quelques bacs et un peu de savoir-faire suffisent.</p>
+    <h2>Choisir ses contenants</h2>
+    <p>Les sacs de riz recyclés, les seaux percés et les caisses en bois récupérées font d'excellents contenants. L'essentiel est d'assurer un bon drainage.</p>
+    <h2>Le substrat idéal</h2>
+    <p>Mélangez terre du jardin, compost maison et sable à parts égales. Le compost issu de vos déchets de cuisine enrichit le sol en nutriments.</p>
+    <h2>Arrosage et entretien</h2>
+    <p>Arrosez le matin tôt ou le soir pour limiter l'évaporation. Le paillage maintient l'humidité et protège les racines de la chaleur.</p>`
+  },
+  {
+    category: "environnement",
+    catLabel: "Environnement",
+    title: "Mangroves du littoral : un rempart naturel en danger",
+    excerpt: "Les mangroves protègent nos côtes, filtrent l'eau et stockent le carbone. Pourtant, elles disparaissent.",
+    author: "Ibrahim Sanogo",
+    date: "14 sept. 2026",
+    readTime: "6 min",
+    colors: ["#1a3d4a", "#2d6a7a", "#3d8a9a"],
+    body: `<p>Les mangroves du littoral ivoirien constituent un écosystème d'une importance capitale. Ces forêts de palétuviers assurent des fonctions écologiques irremplaçables.</p>
+    <h2>Des services écologiques vitaux</h2>
+    <p>Les mangroves absorbent jusqu'à quatre fois plus de carbone par hectare qu'une forêt tropicale terrestre. Elles protègent les côtes de l'érosion et servent de nurserie à de nombreuses espèces de poissons.</p>
+    <blockquote>Détruire un hectare de mangrove, c'est perdre une barrière naturelle qui protégeait le littoral depuis des siècles.</blockquote>
+    <h2>Agir pour les restaurer</h2>
+    <p>Des associations locales organisent des campagnes de replantation de palétuviers. L'objectif national est de restaurer 3 000 hectares de mangroves d'ici 2030.</p>`
+  },
+  {
+    category: "faune",
+    catLabel: "Faune",
+    title: "Le calao à casque noir, sentinelle des forêts denses",
+    excerpt: "Ce grand oiseau au bec spectaculaire est un indicateur précieux de la santé de nos forêts.",
+    author: "Marie-Claire Assi",
+    date: "10 sept. 2026",
+    readTime: "4 min",
+    colors: ["#1a1a3d", "#3d3d6b", "#5a5a8a"],
+    body: `<p>Reconnaissable à son immense bec surmonté d'un casque noir, le calao est l'un des oiseaux les plus emblématiques des forêts ivoiriennes.</p>
+    <h2>Rôle écologique</h2>
+    <p>Grand consommateur de fruits, le calao est un disperseur de graines essentiel. Sa présence est un indicateur fiable de la santé d'un écosystème forestier.</p>
+    <p>La conservation de cet oiseau passe par la protection de son habitat : des arbres matures aux cavités naturelles, indispensables à sa nidification.</p>`
+  }
+];
+
+// ---- LIKES & FAVORITES STATE ----
+const state = { likes: {}, favorites: {} };
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('terreverte_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      Object.assign(state.likes, parsed.likes || {});
+      Object.assign(state.favorites, parsed.favorites || {});
+    }
+  } catch(e) { /* localStorage unavailable */ }
+}
+
+function saveState() {
+  try {
+    localStorage.setItem('terreverte_state', JSON.stringify(state));
+  } catch(e) { /* silently fail */ }
+}
+
+function getLikes(idx) {
+  // Base likes + user like
+  const baseLikes = [142, 87, 63, 95, 71, 38];
+  return (baseLikes[idx] || 50) + (state.likes[idx] ? 1 : 0);
+}
+
+function toggleLike(idx, e) {
+  if (e) e.stopPropagation();
+  state.likes[idx] = !state.likes[idx];
+  saveState();
+  renderCards(currentFilter);
+  if (document.getElementById('articleView').classList.contains('open')) {
+    renderArticleActions(idx);
+  }
+  showToast(state.likes[idx] ? '♥ Article aimé' : 'Like retiré');
+}
+
+function toggleFavorite(idx, e) {
+  if (e) e.stopPropagation();
+  state.favorites[idx] = !state.favorites[idx];
+  saveState();
+  updateFavCount();
+  renderCards(currentFilter);
+  if (document.getElementById('articleView').classList.contains('open')) {
+    renderArticleActions(idx);
+  }
+  showToast(state.favorites[idx] ? '★ Ajouté aux favoris' : 'Retiré des favoris');
+}
+
+function updateFavCount() {
+  const count = Object.values(state.favorites).filter(Boolean).length;
+  const badge = document.getElementById('navFavCount');
+  if (count > 0) {
+    badge.textContent = count;
+    badge.hidden = false;
+  } else {
+    badge.hidden = true;
+  }
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => toast.classList.remove('show'), 1800);
+}
+
+// ---- SVG ICONS ----
+const heartSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+const bookmarkSvg = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>`;
+
+// Generate card illustration SVGs
+function makeCardSvg(colors, cat) {
+  const shapes = {
+    faune: `<ellipse cx="150" cy="120" rx="60" ry="45" fill="${colors[1]}" opacity="0.6"/><circle cx="120" cy="100" r="20" fill="${colors[2]}" opacity="0.5"/><circle cx="180" cy="95" r="15" fill="${colors[2]}" opacity="0.4"/><path d="M100 140 Q150 80 200 140" stroke="${colors[2]}" stroke-width="2" fill="none" opacity="0.5"/>`,
+    flore: `<circle cx="150" cy="90" r="40" fill="${colors[1]}" opacity="0.5"/><path d="M150 130 Q140 90 120 70" stroke="${colors[2]}" stroke-width="3" fill="none" opacity="0.6"/><path d="M150 130 Q160 90 180 70" stroke="${colors[2]}" stroke-width="3" fill="none" opacity="0.6"/><circle cx="150" cy="75" r="12" fill="${colors[2]}" opacity="0.4"/><circle cx="130" cy="85" r="8" fill="${colors[2]}" opacity="0.3"/><circle cx="170" cy="85" r="8" fill="${colors[2]}" opacity="0.3"/>`,
+    ecotourisme: `<path d="M80 150 L150 50 L220 150Z" fill="${colors[1]}" opacity="0.5"/><path d="M120 150 L170 80 L220 150Z" fill="${colors[2]}" opacity="0.4"/><circle cx="200" cy="55" r="18" fill="${colors[2]}" opacity="0.3"/>`,
+    environnement: `<path d="M60 140 Q110 40 150 90 Q190 40 240 140Z" fill="${colors[1]}" opacity="0.4"/><path d="M100 150 Q140 70 180 150" fill="${colors[2]}" opacity="0.3"/><circle cx="150" cy="60" r="10" fill="${colors[2]}" opacity="0.5"/>`,
+    jardinage: `<rect x="110" y="90" width="80" height="60" rx="4" fill="${colors[1]}" opacity="0.5"/><path d="M150 90 Q145 50 130 40" stroke="${colors[2]}" stroke-width="3" fill="none" opacity="0.6"/><path d="M150 90 Q155 45 170 35" stroke="${colors[2]}" stroke-width="3" fill="none" opacity="0.6"/><circle cx="130" cy="38" r="8" fill="${colors[2]}" opacity="0.5"/><circle cx="170" cy="33" r="7" fill="${colors[2]}" opacity="0.5"/>`
+  };
+  return `<svg viewBox="0 0 300 180" xmlns="http://www.w3.org/2000/svg"><rect width="300" height="180" fill="${colors[0]}"/>${shapes[cat] || shapes.ecotourisme}</svg>`;
+}
+
+let currentFilter = 'all';
+
+function renderCards(filter) {
+  currentFilter = filter;
+  const grid = document.getElementById('articlesGrid');
+  let filtered;
+  if (filter === 'favorites') {
+    filtered = articles.filter((_, i) => state.favorites[i]);
+  } else {
+    filtered = filter === 'all' ? articles.slice(1) : articles.filter(a => a.category === filter);
+  }
+
+  if (filter === 'favorites' && filtered.length === 0) {
+    grid.innerHTML = `<div class="fav-empty" style="grid-column:1/-1">
+      <p style="font-size:1.8rem; margin-bottom:8px;">♥</p>
+      <p>Aucun favori pour le moment.<br>Cliquez sur le signet d'un article pour le sauvegarder ici.</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map((a) => {
+    const realIdx = articles.indexOf(a);
+    const liked = state.likes[realIdx];
+    const saved = state.favorites[realIdx];
+    return `<div class="article-card" data-cat="${a.category}" onclick="openArticle(${realIdx})">
+      <div class="card-img">${makeCardSvg(a.colors, a.category)}</div>
+      <div class="card-body">
+        <span class="card-category">${a.catLabel}</span>
+        <h3>${a.title}</h3>
+        <p class="excerpt">${a.excerpt}</p>
+      </div>
+      <div class="card-footer">
+        <span>${a.author} · ${a.date}</span>
+        <div class="card-actions">
+          <button class="like-btn${liked ? ' liked' : ''}" onclick="toggleLike(${realIdx}, event)" aria-label="Aimer">
+            <span class="pop">${heartSvg}</span> ${getLikes(realIdx)}
+          </button>
+          <button class="fav-btn${saved ? ' saved' : ''}" onclick="toggleFavorite(${realIdx}, event)" aria-label="Favoris">
+            ${bookmarkSvg}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPopular() {
+  const popular = [0, 3, 4, 1];
+  document.getElementById('popularList').innerHTML = popular.map((idx, i) => {
+    const a = articles[idx];
+    return `<div class="popular-item" onclick="openArticle(${idx})">
+      <span class="popular-num">0${i + 1}</span>
+      <div>
+        <h4>${a.title}</h4>
+        <span class="pop-cat">${a.catLabel} · ${a.readTime}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderArticleActions(idx) {
+  const liked = state.likes[idx];
+  const saved = state.favorites[idx];
+  document.getElementById('artActions').innerHTML = `
+    <button class="like-btn${liked ? ' liked' : ''}" onclick="toggleLike(${idx})">
+      <span class="pop">${heartSvg}</span> ${liked ? 'Aimé' : 'Aimer'} · ${getLikes(idx)}
+    </button>
+    <button class="fav-btn${saved ? ' saved' : ''}" onclick="toggleFavorite(${idx})">
+      ${bookmarkSvg} ${saved ? 'Sauvegardé' : 'Sauvegarder'}
+    </button>
+  `;
+}
+
+function filterCategory(cat) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  const tabs = document.querySelectorAll('.cat-tab');
+  const names = ['all', 'faune', 'flore', 'ecotourisme', 'environnement', 'jardinage'];
+  const idx = names.indexOf(cat);
+  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  if (cat === 'all') document.querySelector('.nav-links a').classList.add('active');
+
+  // Update section heading
+  const heading = document.querySelector('.section-heading h2');
+  if (heading) heading.textContent = 'Articles récents';
+
+  renderCards(cat);
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+function showFavorites() {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('navFavLink').classList.add('active');
+
+  const heading = document.querySelector('.section-heading h2');
+  if (heading) heading.textContent = 'Mes favoris';
+
+  renderCards('favorites');
+  document.getElementById('navLinks').classList.remove('open');
+}
+
+let currentArticleIdx = -1;
+
+function openArticle(idx) {
+  currentArticleIdx = idx;
+  const a = articles[idx];
+  document.getElementById('artCategory').textContent = a.catLabel;
+  document.getElementById('artTitle').textContent = a.title;
+  document.getElementById('artMeta').textContent = `Par ${a.author} · ${a.date} · ${a.readTime} de lecture`;
+  document.getElementById('artBody').innerHTML = a.body;
+  renderArticleActions(idx);
+  document.getElementById('articleView').classList.add('open');
+  document.getElementById('articleView').scrollTop = 0;
+}
+
+function closeArticle() {
+  document.getElementById('articleView').classList.remove('open');
+  currentArticleIdx = -1;
+}
+
+function subscribeNewsletter(e) {
+  e.preventDefault();
+  const msg = document.getElementById('nlMsg');
+  const email = document.getElementById('nlEmail').value;
+  msg.textContent = `Merci ! ${email} a été inscrit à la newsletter.`;
+  msg.style.display = 'block';
+  document.getElementById('nlEmail').value = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeArticle();
+});
+
+// Init
+loadState();
+updateFavCount();
+renderCards('all');
+renderPopular();
+</script>
